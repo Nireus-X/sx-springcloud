@@ -1,0 +1,20 @@
+spring:  application:    name: sx-eureka  security:    user:      name: admin      password: 123456  
+server:
+  port: 8761
+  
+eureka:  server:    enable-self-preservation: false
+#    剔除服务时间间隔 关闭自我保护才会剔除
+    eviction-interval-timer-in-ms: 30000
+  instance:    hostname: 127.0.0.1
+    #注册ip
+    prefer-ip-address: true
+    ip-address: ${eureka.instance.hostname}
+    instance-id: ${eureka.instance.hostname}:${server.port}
+    lease-expiration-duration-in-seconds: 90
+    lease-renewal-interval-in-seconds: 30  client:
+#单机版设置false 服务端注册信息
+    registerWithEureka: false
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://${spring.security.user.name}:${spring.security.user.password}@${eureka.instance.instance-id}/eureka/
+#指定日志配置logging:  config: classpath:logback.xml  level:    root: info    com.netflix: warn    org.springframework.web: info
