@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    	<encoder>
+        	<pattern>
+        		%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
+        	</pattern>
+        </encoder>
+    </appender>
+
+	<!-- 输出info日志 -->
+    <appender name="INFO_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    	<filter class="ch.qos.logback.classic.filter.LevelFilter">
+        	<level>INFO</level>
+        	<onMatch>DENY</onMatch>
+        	<onMismatch>ACCEPT</onMismatch>
+    	</filter>
+    	<encoder>
+        	<charset>UTF-8</charset>
+        	<pattern>%d [%thread] %-5level %logger{36} %line - %msg%n</pattern>
+    	</encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logback/authorization-info-%d{yyyy-MM-dd}.log.%i</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <!--日志输出编码格式化-->
+
+    </appender>
+
+	<!-- 输出error日志 -->
+    <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    	<!--如果只是想要 Error 级别的日志，那么需要过滤一下，默认是 info 级别的，ThresholdFilter-->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <encoder>
+        	<charset>UTF-8</charset>
+        	<pattern>%d [%thread] %-5level %logger{36} %line - %msg%n</pattern>
+    	</encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logback/authorization-error-%d{yyyy-MM-dd}.log.%i</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <!--日志输出编码格式化-->
+
+    </appender>
+
+    <!--输出到mysql数据库的appender配置    
+	 <appender name="MYSQL" class="ch.qos.logback.classic.db.DBAppender">
+	     <connectionSource class="ch.qos.logback.core.db.DriverManagerConnectionSource">
+	         <driverClass>com.mysql.jdbc.Driver</driverClass>
+	         <url>jdbc:mysql://192.168.0.27:3306/swoceandb?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=true</url>
+	         <user>root</user>
+	         <password>root</password>
+	     </connectionSource>
+	 </appender>
+     -->
+	<!--指定最基础的日志输出级别-->
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="INFO_FILE" />
+        <appender-ref ref="ERROR_FILE" />
+        <!--<appender-ref ref="MYSQL" />  -->
+    </root>
+
+</configuration>

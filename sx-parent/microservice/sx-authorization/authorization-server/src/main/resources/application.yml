@@ -1,0 +1,46 @@
+server:
+  port: 7001
+
+spring:
+  application:
+    name: sx-authorization
+  security:
+    user:
+      name: admin
+      password: 123456
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/sx_ctrl_center?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8
+    username: root
+    password: root
+eureka:
+  instance:
+    hostname: 127.0.0.1
+    #注册ip
+    prefer-ip-address: true
+    ip-address: ${eureka.instance.hostname}
+    instance-id: ${eureka.instance.hostname}:${server.port}
+    lease-expiration-duration-in-seconds: 90
+    lease-renewal-interval-in-seconds: 30
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://${spring.security.user.name}:${spring.security.user.password}@127.0.0.1:8761/eureka/
+feign:
+  client:
+    config:
+      default:  # 服务名，default表示所有服务
+        connectTimeout: 5000  #请求连接超时
+        readTimeout: 5000  #请求处理超时
+        loggerLevel: none  # full | basic | none | headers
+#非对称加密
+encrypt:  key-store:    location: classpath:oauth2.jks
+    alias: oauth2
+    password: oauth2
+#指定日志配置
+logging:
+  config: classpath:logback.xml
+  level:
+    root: info
+    org.springframework.web: info
